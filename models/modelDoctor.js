@@ -45,7 +45,16 @@ const Doctor = sequelize.define('doctores', {
   //Hasheo de passwords --Verificar luego con el reseteo de contras
   Doctor.beforeCreate(async (doctor, options) => {
     if(!doctor.changed('contrasena')){
-      return options();
+      return ;
+    }
+    const saltRounds = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(doctor.contrasena, saltRounds);
+    doctor.contrasena = hashedPassword;
+  });
+
+  Doctor.beforeUpdate(async (doctor, options) => {
+    if (!doctor.changed('contrasena')) {
+      return;
     }
     const saltRounds = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(doctor.contrasena, saltRounds);

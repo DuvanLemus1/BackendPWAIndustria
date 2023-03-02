@@ -2,11 +2,12 @@
 import express  from "express";
 import sequelize from "./config/db.js";
 import routerDoctores from "./routes/routerDoctor.js";
+import dotenv from 'dotenv';
 import cors from 'cors'
 
 const app = express();
 app.use(express.json());
-
+dotenv.config();
 
 //Probar la conexion a la BD --------------------------------
 sequelize
