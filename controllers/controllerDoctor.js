@@ -2,6 +2,7 @@
 import Doctor from "../models/modelDoctor.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
+import { correoRegistro, correoRecuperacion } from "../helpers/correos.js";
 
 const registrarDoctor = async (req, res) => {
 
@@ -19,9 +20,19 @@ const registrarDoctor = async (req, res) => {
     try {
       const doctor = new Doctor(req.body);
       doctor.token = generarId();
-      const doctorRegistrado = await doctor.save();
-      res.json(doctorRegistrado);
-      console.log(doctorRegistrado);
+      await doctor.save();
+      res.json({
+        msg:"Usuario creado, revisa email"
+      })
+
+      //Enviar Correo
+      correoRegistro({
+        correoElectronico: doctor.correoElectronico,
+        nombreDoctor: doctor.nombreDoctor,
+        token: doctor.token
+      });
+
+      
     } catch (error) {
       console.log(error);
     }
@@ -73,15 +84,15 @@ const registrarDoctor = async (req, res) => {
         return res.status(403).json({msg: error.message});
         }
     
-    try { 
-        doctorConfirmar.confirmado = true;
-        doctorConfirmar.token = null;
-        await doctorConfirmar.save();
-        res.json({msg:'Doctor confirmado correctamente'});
-        console.log(doctorConfirmar);
-    } catch (error) {
-        console.log(error);
-    }
+        try { 
+            doctorConfirmar.confirmado = true;
+            doctorConfirmar.token = null;
+            await doctorConfirmar.save();
+            res.json({msg:"Doctor confirmado correctamente"});
+        
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const olvideContrasena = async (req, res)=>{
@@ -101,6 +112,14 @@ const registrarDoctor = async (req, res) => {
             doctor.token=generarId();
             console.log(doctor);
             await doctor.save();
+
+            //Enviar Email
+            correoRecuperacion({
+                correoElectronico: doctor.correoElectronico,
+                nombreDoctor: doctor.nombreDoctor,
+                token: doctor.token
+              });
+
             res.json({msg:'Hemos un enviado un correo para el reestablecimiento de tu contrasena'});
         } catch (error) {
             console.log(error)
