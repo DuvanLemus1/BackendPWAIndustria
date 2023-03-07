@@ -2,6 +2,7 @@
 import express  from "express";
 import sequelize from "./config/db.js";
 import routerDoctores from "./routes/routerDoctor.js";
+import routerPacientes from "./routes/routerPaciente.js";
 import dotenv from 'dotenv';
 import cors from 'cors'
 
@@ -22,7 +23,7 @@ sequelize
 
 
 //Configurar CORS
-
+/*
 const whitelist=["http://127.0.0.1:5173"];
 
 const corsOptions={
@@ -37,9 +38,11 @@ const corsOptions={
   }
 };
 app.use(cors(corsOptions));
+*/
 
 //Administrar Routing-----------------------------------------
 app.use("/api/doctores", routerDoctores);
+app.use("/api/pacientes", routerPacientes)
 
 
 
