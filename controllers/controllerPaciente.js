@@ -97,7 +97,7 @@ const eliminarPaciente = async (req, res) => {
         }
 
         try {
-                const pacienteEliminado = await Paciente.destroy({
+                await Paciente.destroy({
                         where: {
                           idPaciente: idPaciente
                         }})
