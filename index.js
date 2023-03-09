@@ -1,10 +1,14 @@
 
 import express  from "express";
 import sequelize from "./config/db.js";
+
+//Importar routers
 import routerDoctores from "./routes/routerDoctor.js";
 import routerPacientes from "./routes/routerPaciente.js";
+import routerProveedores from "./routes/routerProveedor.js";
+
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
@@ -43,7 +47,7 @@ app.use(cors(corsOptions));
 //Administrar Routing-----------------------------------------
 app.use("/api/doctores", routerDoctores);
 app.use("/api/pacientes", routerPacientes)
-
+app.use("/api/proveedores", routerProveedores)
 
 
 const PORT= 4000;

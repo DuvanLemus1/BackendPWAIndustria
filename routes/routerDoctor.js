@@ -18,8 +18,6 @@ routerDoctores.post('/', registrarDoctor);
 routerDoctores.post('/login', autenticarDoctor);
 routerDoctores.get('/confirmarCuenta/:token', confirmarCuenta);
 routerDoctores.post('/olvideContrasena', olvideContrasena);
-//routerDoctores.get('/olvideContrasena/:token', comprobarToken);
-//routerDoctores.post('/olvideContrasena/:token', nuevaContrasena)
 
 routerDoctores.route('/olvideContrasena/:token')
     .get(comprobarToken)
