@@ -1,6 +1,7 @@
 
 import Paciente from "../models/modelPaciente.js";
 import Doctor from "../models/modelDoctor.js";
+import Cita from "../models/modelCitas.js";
 
 const obtenerPacientes = async (req, res) => {
         const doctor=req.doctor;
@@ -114,7 +115,7 @@ const obtenerDetallePaciente = async (req, res) => {
         const paciente = await Paciente.findByPk(idPaciente)
 
         if(!paciente){
-                const error= new Error('No encontrado')
+                const error= new Error('Paciente No encontrado')
                 return res.status(404).json({
                         msg:error.message
                 })
@@ -127,7 +128,22 @@ const obtenerDetallePaciente = async (req, res) => {
                 })
         }
 
-        res.json(paciente);
+        
+        const citas = await Cita.findAll({
+                where: {
+                  idPaciente: paciente.idPaciente
+                },
+                include: {
+                        model: Paciente
+                }
+              });
+        
+        
+        res.json({paciente, citas,});
+
+        
+                
+       
 }
 
 export {obtenerPacientes, 

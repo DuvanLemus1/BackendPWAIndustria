@@ -6,6 +6,7 @@ import sequelize from "./config/db.js";
 import routerDoctores from "./routes/routerDoctor.js";
 import routerPacientes from "./routes/routerPaciente.js";
 import routerProveedores from "./routes/routerProveedor.js";
+import routerCitas from "./routes/routerCitas.js";
 
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -46,8 +47,9 @@ app.use(cors(corsOptions));
 
 //Administrar Routing-----------------------------------------
 app.use("/api/doctores", routerDoctores);
-app.use("/api/pacientes", routerPacientes)
-app.use("/api/proveedores", routerProveedores)
+app.use("/api/pacientes", routerPacientes);
+app.use("/api/proveedores", routerProveedores);
+app.use("/api/citas", routerCitas)
 
 
 const PORT= 4000;
