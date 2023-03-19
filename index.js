@@ -7,6 +7,7 @@ import routerDoctores from "./routes/routerDoctor.js";
 import routerPacientes from "./routes/routerPaciente.js";
 import routerProveedores from "./routes/routerProveedor.js";
 import routerCitas from "./routes/routerCitas.js";
+import routerMedicamentos from "./routes/routerMedicamentos.js";
 
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -28,7 +29,7 @@ sequelize
 
 
 //Configurar CORS
-
+/*
 const whitelist=["http://127.0.0.1:5173"];
 
 const corsOptions={
@@ -43,13 +44,14 @@ const corsOptions={
   }
 };
 app.use(cors(corsOptions));
-
+*/
 
 //Administrar Routing-----------------------------------------
 app.use("/api/doctores", routerDoctores);
 app.use("/api/pacientes", routerPacientes);
 app.use("/api/proveedores", routerProveedores);
-app.use("/api/citas", routerCitas)
+app.use("/api/citas", routerCitas);
+app.use("/api/medicamentos", routerMedicamentos)
 
 
 const PORT= 4000;

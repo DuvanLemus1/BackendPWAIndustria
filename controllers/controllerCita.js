@@ -4,7 +4,7 @@ import Cita from "../models/modelCitas.js";
 
 import Paciente from "../models/modelPaciente.js";
 
-import Doctor from "../models/modelDoctor.js";
+
 
 const crearCita = async (req, res)=>{
 
