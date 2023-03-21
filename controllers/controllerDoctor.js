@@ -46,8 +46,21 @@ const registrarDoctor = async (req, res) => {
         where:{correoElectronico:correoElectronico}
     })
 
+    
+
     if(!doctor){
         const error = new Error('El usuario no existe');
+        return res.status(400).json({msg: error.message});
+    }
+
+    //COMPROBAR FECHA DE SUSCRIPCION
+    const fechaActual = new Date();
+    const anioActual  = fechaActual.getFullYear();
+    const mesActual   = fechaActual.getMonth()+1;
+    const diaActual   = fechaActual.getDate();
+    const fechaActualFormateada = `${anioActual}-${mesActual}-${diaActual}`
+    if(!doctor.fechaFinSuscripcion>fechaActual){
+        const error = new Error('Tu suscripcion ha caducado, renovar para acceder');
         return res.status(400).json({msg: error.message});
     }
     
@@ -57,6 +70,8 @@ const registrarDoctor = async (req, res) => {
         const error = new Error('Tu cuenta no ha sido confirmada');
         return res.status(403).json({msg: error.message});
     }
+
+
     //Comprobar contrasena
     const contrasenaValida = await doctor.comprobarContrasena(contrasena)
     if(contrasenaValida){
@@ -68,11 +83,16 @@ const registrarDoctor = async (req, res) => {
 
         })
         console.log('Es correcto')
-    }else{
-        const error = new Error('La contrasena no es correcta');
-        return res.status(403).json({msg: error.message});
+        }else{
+            const error = new Error('La contrasena no es correcta');
+            return res.status(403).json({msg: error.message});
+        }
+    
+    
+    
     }
-    }
+
+
 
     const confirmarCuenta = async (req, res) => {
         const {token} = req.params;

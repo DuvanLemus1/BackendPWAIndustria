@@ -1,5 +1,5 @@
 import sequelize from '../config/db.js';
-import { DataTypes } from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 import bcrypt from 'bcrypt';
 //import Paciente from './modelPaciente.js';
 
@@ -33,7 +33,39 @@ const Doctor = sequelize.define('doctores', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
-  }
+  },
+  fechaInicioSuscripcion: {
+    type: DataTypes.DATEONLY,
+    defaultValue:Sequelize.fn('now'),
+    allowNull: false
+  },
+  fechaFinSuscripcion: {
+    type: DataTypes.DATEONLY,
+    defaultValue:Sequelize.fn('now'),
+    allowNull: false
+  },
+  costoSuscripcion: {
+    type: DataTypes.DECIMAL(10,2),
+    allowNull: false
+  },
+  fechaInicioNuevaSuscripcion: {
+    type: DataTypes.DATEONLY,
+    allowNull: true
+  },
+  fechaFinNuevaSuscripcion: {
+    type: DataTypes.DATEONLY,
+    allowNull: true
+  },
+  costoNuevaSuscripcion: {
+    type: DataTypes.DECIMAL(10,2),
+    allowNull: true
+  },
+  renovacionAutomatica: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+
   },{
     tablename:'doctores'
   },

@@ -1,5 +1,6 @@
 import Proveedor from "../models/modelProveedor.js";
 import Doctor from "../models/modelDoctor.js";
+import Medicamento from "../models/modelMedicamento.js"
 
 const obtenerProveedores = async (req, res) => {
         const doctor=req.doctor;
@@ -122,7 +123,19 @@ const obtenerDetalleProveedor = async (req, res) => {
                 })
         }
 
-        res.json(proveedor);
+        const medicamentos = await Medicamento.findAll({
+                where: {
+                  idProveedor: proveedor.idProveedor
+                },
+                include: {
+                        model: Proveedor
+                }
+              });
+        
+        
+        res.json({proveedor, medicamentos});
+
+        
 }
 
 export {obtenerProveedores, 
