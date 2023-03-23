@@ -54,14 +54,16 @@ const registrarDoctor = async (req, res) => {
     }
 
     //COMPROBAR FECHA DE SUSCRIPCION
-    const fechaActual = new Date();
+    const fechaActual = new Date();  
     const anioActual  = fechaActual.getFullYear();
     const mesActual   = fechaActual.getMonth()+1;
     const diaActual   = fechaActual.getDate();
     const fechaActualFormateada = `${anioActual}-${mesActual}-${diaActual}`
-    if(!doctor.fechaFinSuscripcion>fechaActual){
+    if(fechaActualFormateada <= doctor.fechaFinSuscripcion){
+        console.log(fechaActualFormateada,' es mayor que ',doctor.fechaFinSuscripcion)
         const error = new Error('Tu suscripcion ha caducado, renovar para acceder');
         return res.status(400).json({msg: error.message});
+        
     }
     
     //Comprobar si el usuario esta confirmado
