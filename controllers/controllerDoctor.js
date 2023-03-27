@@ -56,15 +56,20 @@ const registrarDoctor = async (req, res) => {
     //COMPROBAR FECHA DE SUSCRIPCION
     const fechaActual = new Date();  
     const anioActual  = fechaActual.getFullYear();
-    const mesActual   = fechaActual.getMonth()+1;
-    const diaActual   = fechaActual.getDate();
+    const mesActual   = (fechaActual.getMonth()+1).toString().padStart(2, '0');
+    const diaActual   = fechaActual.getDate().toString().padStart(2, '0');
     const fechaActualFormateada = `${anioActual}-${mesActual}-${diaActual}`
-    if(fechaActualFormateada <= doctor.fechaFinSuscripcion){
-        console.log(fechaActualFormateada,' es mayor que ',doctor.fechaFinSuscripcion)
+    console.log(fechaActualFormateada);
+    console.log(doctor.fechaFinSuscripcion);
+    if(doctor.fechaFinSuscripcion >= fechaActualFormateada){
+        console.log(doctor.fechaFinSuscripcion,' es mayor que ',fechaActualFormateada, ', se permite el aceeso')
+        
+    }else{
         const error = new Error('Tu suscripcion ha caducado, renovar para acceder');
         return res.status(400).json({msg: error.message});
-        
     }
+
+    //verificar
     
     //Comprobar si el usuario esta confirmado
     
@@ -199,6 +204,71 @@ const registrarDoctor = async (req, res) => {
         res.json(doctor);
     }
 
+    const actualizarDoctor= async (req, res) =>{
+        
+            const {idDoctor} = req.params;
+    
+            const doctor = await Doctor.findByPk(idDoctor)
+    
+            if(!doctor){
+                    const error= new Error('Doctor No encontrado')
+                    return res.status(404).json({
+                            msg:error.message
+                    })
+            }
+    
+            if(doctor.idDoctor!==req.doctor.idDoctor){
+                    const error= new Error('No puedes modificar los datos de otro medico')
+                    return res.status(404).json({
+                            msg:error.message
+                    })
+            }
+    
+            doctor.nombreDoctor = 
+                    req.body.nombreDoctor
+                    || doctor.nombreDoctor;
+    
+            doctor.telefono = 
+                    req.body.telefono
+                    || doctor.telefono;
+            
+            doctor.contrasena = 
+                req.body.contrasena
+                    || doctor.contrasena;
+            
+            try {
+                    const doctorActualizado = await doctor.save();
+                    res.json(doctorActualizado);
+                    
+            } catch (error) {
+                    console.log(error)
+            }
+    
+    }
+
+    const obtenerDoctor = async (req, res) =>{
+        const {idDoctor} = req.params;
+
+        const doctor = await Doctor.findByPk(idDoctor)
+
+        if(!doctor){
+                const error= new Error('Doctor No encontrado')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+
+        if(doctor.idDoctor!==req.doctor.idDoctor){
+                const error= new Error('No puedes ver los datos de otros doctores')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+
+        
+        res.json(doctor);
+    }
+
 
   export {registrarDoctor, 
           autenticarDoctor, 
@@ -206,5 +276,7 @@ const registrarDoctor = async (req, res) => {
           olvideContrasena,
           comprobarToken,
           nuevaContrasena, 
-          perfil};
+          perfil,
+          actualizarDoctor,
+          obtenerDoctor};
 

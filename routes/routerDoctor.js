@@ -6,7 +6,9 @@ import {registrarDoctor,
         olvideContrasena,
         comprobarToken,
         nuevaContrasena,
-        perfil} 
+        perfil,
+        actualizarDoctor,
+        obtenerDoctor} 
             from '../controllers/controllerDoctor.js'
 
 import checkAuth from '../middleware/checkAuth.js';
@@ -23,7 +25,9 @@ routerDoctores.route('/olvideContrasena/:token')
     .get(comprobarToken)
     .post(nuevaContrasena);
 
-routerDoctores.get('/perfil', checkAuth, perfil)
+routerDoctores.get('/perfil', checkAuth, perfil);
+routerDoctores.put('/actualizarDoctor/:idDoctor', checkAuth, actualizarDoctor);
+routerDoctores.get('/obtenerDoctor/:idDoctor', checkAuth, obtenerDoctor )
 
 
 export default routerDoctores;
