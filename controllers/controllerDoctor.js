@@ -246,6 +246,52 @@ const registrarDoctor = async (req, res) => {
     
     }
 
+    const actualizarSuscripcionDoctor= async (req, res) =>{
+        
+        const {idDoctor} = req.params;
+
+        const doctor = await Doctor.findByPk(idDoctor)
+
+        if(!doctor){
+                const error= new Error('Doctor No encontrado')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+
+        if(doctor.idDoctor!==req.doctor.idDoctor){
+                const error= new Error('No puedes modificar los datos de otro medico')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+
+        doctor.renovacionAutomatica = 
+                req.body.renovacionAutomatica
+                || doctor.renovacionAutomatica;
+
+        doctor.fechaInicioNuevaSuscripcion = 
+                req.body.fechaInicioNuevaSuscripcion
+                || doctor.fechaInicioNuevaSuscripcion;
+        
+        doctor.fechaFinNuevaSuscripcion = 
+            req.body.fechaFinNuevaSuscripcion
+                || doctor.fechaFinNuevaSuscripcion;
+
+        doctor.costoNuevaSuscripcion = 
+            req.body.costoNuevaSuscripcion
+                || doctor.costoNuevaSuscripcion;
+        
+        try {
+            const doctorActualizado = await doctor.save();
+            res.json(doctorActualizado);
+                
+        } catch (error) {
+            console.log(error)
+        }
+
+}
+
     const obtenerDoctor = async (req, res) =>{
         const {idDoctor} = req.params;
 
@@ -278,5 +324,6 @@ const registrarDoctor = async (req, res) => {
           nuevaContrasena, 
           perfil,
           actualizarDoctor,
+          actualizarSuscripcionDoctor,
           obtenerDoctor};
 

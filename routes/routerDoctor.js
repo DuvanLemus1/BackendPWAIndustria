@@ -8,7 +8,8 @@ import {registrarDoctor,
         nuevaContrasena,
         perfil,
         actualizarDoctor,
-        obtenerDoctor} 
+        obtenerDoctor,
+        actualizarSuscripcionDoctor} 
             from '../controllers/controllerDoctor.js'
 
 import checkAuth from '../middleware/checkAuth.js';
@@ -27,7 +28,8 @@ routerDoctores.route('/olvideContrasena/:token')
 
 routerDoctores.get('/perfil', checkAuth, perfil);
 routerDoctores.put('/actualizarDoctor/:idDoctor', checkAuth, actualizarDoctor);
-routerDoctores.get('/obtenerDoctor/:idDoctor', checkAuth, obtenerDoctor )
+routerDoctores.get('/obtenerDoctor/:idDoctor', checkAuth, obtenerDoctor );
+routerDoctores.put('/actualizarSuscripcionDoctor/:idDoctor', checkAuth, actualizarSuscripcionDoctor);
 
 
 export default routerDoctores;
