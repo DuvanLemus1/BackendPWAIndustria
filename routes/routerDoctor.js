@@ -9,7 +9,8 @@ import {registrarDoctor,
         perfil,
         actualizarDoctor,
         obtenerDoctor,
-        actualizarSuscripcionDoctor} 
+        actualizarSuscripcionDoctor,
+        obtenerDoctores} 
             from '../controllers/controllerDoctor.js'
 
 import checkAuth from '../middleware/checkAuth.js';
@@ -30,6 +31,7 @@ routerDoctores.get('/perfil', checkAuth, perfil);
 routerDoctores.put('/actualizarDoctor/:idDoctor', checkAuth, actualizarDoctor);
 routerDoctores.get('/obtenerDoctor/:idDoctor', checkAuth, obtenerDoctor );
 routerDoctores.put('/actualizarSuscripcionDoctor/:idDoctor', checkAuth, actualizarSuscripcionDoctor);
+routerDoctores.get('/obtenerDoctores', checkAuth, obtenerDoctores);
 
 
 export default routerDoctores;

@@ -266,10 +266,18 @@ const registrarDoctor = async (req, res) => {
                 })
         }
 
+        if(req.body.renovacionAutomatica===1){
+            doctor.renovacionAutomatica=1
+        }else if(req.body.renovacionAutomatica===0){
+            doctor.renovacionAutomatica=0
+        }else if(!req.body.renovacionAutomatica){
+            doctor.renovacionAutomatica=doctor.renovacionAutomatica
+        }
+        /*
         doctor.renovacionAutomatica = 
                 req.body.renovacionAutomatica
                 || doctor.renovacionAutomatica;
-
+        */
         doctor.fechaInicioNuevaSuscripcion = 
                 req.body.fechaInicioNuevaSuscripcion
                 || doctor.fechaInicioNuevaSuscripcion;
@@ -315,6 +323,23 @@ const registrarDoctor = async (req, res) => {
         res.json(doctor);
     }
 
+    const obtenerDoctores = async(req,res) =>{
+        const doctores = await Doctor.findAll({
+            attributes:
+                {exclude:['contrasena', 'token']}
+        })
+
+        if(!doctores){
+                const error= new Error('Error de consulta a BD')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+
+        res.json(doctores)
+
+    }
+
 
   export {registrarDoctor, 
           autenticarDoctor, 
@@ -325,5 +350,6 @@ const registrarDoctor = async (req, res) => {
           perfil,
           actualizarDoctor,
           actualizarSuscripcionDoctor,
-          obtenerDoctor};
+          obtenerDoctor,
+          obtenerDoctores};
 
