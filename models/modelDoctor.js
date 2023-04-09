@@ -13,6 +13,20 @@ const Doctor = sequelize.define('doctores', {
     type: DataTypes.STRING(200),
     allowNull: false,
   },
+  segundoNombreDoctor: {
+    type: DataTypes.STRING(200)
+  },
+  apellidoDoctor: {
+    type: DataTypes.STRING(200),
+    allowNull: false,
+  },
+  segundoApellidoDoctor: {
+    type: DataTypes.STRING(200)
+  },
+  rol: {
+    type: DataTypes.STRING(200),
+    defaultValue:'usuario'
+  },
   correoElectronico: {
     type: DataTypes.STRING(200),
     allowNull: false,

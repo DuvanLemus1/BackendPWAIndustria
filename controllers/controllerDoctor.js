@@ -228,6 +228,19 @@ const registrarDoctor = async (req, res) => {
                     req.body.nombreDoctor
                     || doctor.nombreDoctor;
     
+            doctor.segundoNombreDoctor = 
+                    req.body.segundoNombreDoctor
+                    || doctor.segundoNombreDoctor;
+    
+    
+            doctor.apellidoDoctor = 
+                    req.body.apellidoDoctor
+                    || doctor.apellidoDoctor;
+            
+            doctor.segundoApellidoDoctor = 
+                    req.body.segundoApellidoDoctor
+                    || doctor.segundoApellidoDoctor;
+
             doctor.telefono = 
                     req.body.telefono
                     || doctor.telefono;
@@ -326,7 +339,7 @@ const registrarDoctor = async (req, res) => {
     const obtenerDoctores = async(req,res) =>{
         const doctores = await Doctor.findAll({
             attributes:
-                {exclude:['contrasena', 'token']}
+                {exclude:['contrasena', 'token' ]}
         })
 
         if(!doctores){
@@ -340,6 +353,40 @@ const registrarDoctor = async (req, res) => {
 
     }
 
+    const eliminarDoctor= async (req, res) =>{
+        
+        const {idDoctor} = req.params;
+
+        
+        const doctor = await Doctor.findByPk(idDoctor)
+
+        if(!doctor){
+                const error= new Error('Doctor No encontrado')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+/*
+        if(doctor.idDoctor!==req.doctor.idDoctor){
+                const error= new Error('No puedes modificar los datos de otro medico')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+        */
+
+        try {
+            await doctor.destroy({
+                where: {
+                  idDoctor: idDoctor
+                }})
+        res.json({msg:'Doctor Eliminado exitosamente'})
+                
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
   export {registrarDoctor, 
           autenticarDoctor, 
@@ -351,5 +398,7 @@ const registrarDoctor = async (req, res) => {
           actualizarDoctor,
           actualizarSuscripcionDoctor,
           obtenerDoctor,
-          obtenerDoctores};
+          obtenerDoctores,
+          eliminarDoctor
+          };
 
