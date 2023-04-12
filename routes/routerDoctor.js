@@ -11,7 +11,9 @@ import {registrarDoctor,
         obtenerDoctor,
         actualizarSuscripcionDoctor,
         obtenerDoctores,
-        eliminarDoctor} 
+        eliminarDoctor,
+        comprobarSuscripciones,
+        cancelarSuscripcion} 
             from '../controllers/controllerDoctor.js'
 
 import checkAuth from '../middleware/checkAuth.js';
@@ -34,6 +36,8 @@ routerDoctores.get('/obtenerDoctor/:idDoctor', checkAuth, obtenerDoctor );
 routerDoctores.put('/actualizarSuscripcionDoctor/:idDoctor', checkAuth, actualizarSuscripcionDoctor);
 routerDoctores.get('/obtenerDoctores', checkAuth, obtenerDoctores);
 routerDoctores.delete('/eliminarDoctor/:idDoctor', checkAuth, eliminarDoctor);
+routerDoctores.put('/comprobarSuscripciones', checkAuth, comprobarSuscripciones);
+routerDoctores.put('/cancelarSuscripcion/:idDoctor', checkAuth, cancelarSuscripcion);
 
 
 export default routerDoctores;

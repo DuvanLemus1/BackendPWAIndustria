@@ -48,6 +48,10 @@ const Doctor = sequelize.define('doctores', {
     allowNull: false,
     defaultValue: false
   },
+  tipoSuscripcion:{
+    type:DataTypes.INTEGER,
+    allowNull:false
+  },
   fechaInicioSuscripcion: {
     type: DataTypes.DATEONLY,
     defaultValue:Sequelize.fn('now'),

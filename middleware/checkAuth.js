@@ -29,7 +29,22 @@ const checkAuth = async (req, res, next) =>{
         const error = new Error('Token no valido');
         return res.status(401).json({msg:error.message});
     }
+
+    /*
+    function esAdministrador(doctor) {
+        return doctor.rol === 'administrador';
+      }
     
+    // Agrega esta condición para validar el rol del doctor
+    if (req.doctor && esAdministrador(req.doctor) && req.path === '/panelDeControl') {
+        return next();
+    }
+
+    // Agrega esta condición para redirigir a /perfilDoctor
+    if (req.doctor && !esAdministrador(req.doctor) && req.path === '/panelDeControl') {
+        return res.redirect('/perfilDoctor');
+    }
+    */
     
     next();
     
