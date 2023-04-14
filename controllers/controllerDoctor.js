@@ -1,5 +1,6 @@
 
 import Doctor from "../models/modelDoctor.js";
+import HistoricoSuscripcion from "../models/modelHistoricoSuscripciones.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
 import { correoRegistro, correoRecuperacion } from "../helpers/correos.js";
@@ -20,27 +21,30 @@ const registrarDoctor = async (req, res) => {
     
     try {
       const doctor = new Doctor(req.body);
+      
       doctor.token = generarId();
-
       if(doctor.renovacionAutomatica===true){
         if(doctor.tipoSuscripcion===1){
             doctor.fechaInicioNuevaSuscripcion = doctor.fechaFinSuscripcion;
             let fechaNuevoInicio = new Date(doctor.fechaInicioNuevaSuscripcion);
             fechaNuevoInicio.setDate(fechaNuevoInicio.getDate()+30)
             doctor.fechaFinNuevaSuscripcion = fechaNuevoInicio;
-            doctor.costoNuevaSuscripcion = doctor.costoSuscripcion
+            doctor.costoNuevaSuscripcion = doctor.costoSuscripcion;
+            doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
         }else if(doctor.tipoSuscripcion===2){
             doctor.fechaInicioNuevaSuscripcion = doctor.fechaFinSuscripcion;
             let fechaNuevoInicio = new Date(doctor.fechaInicioNuevaSuscripcion);
             fechaNuevoInicio.setDate(fechaNuevoInicio.getDate()+90)
             doctor.fechaFinNuevaSuscripcion = fechaNuevoInicio;
-            doctor.costoNuevaSuscripcion = doctor.costoSuscripcion
+            doctor.costoNuevaSuscripcion = doctor.costoSuscripcion;
+            doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
         }else{
             doctor.fechaInicioNuevaSuscripcion = doctor.fechaFinSuscripcion;
             let fechaNuevoInicio = new Date(doctor.fechaInicioNuevaSuscripcion);
             fechaNuevoInicio.setDate(fechaNuevoInicio.getDate()+365)
             doctor.fechaFinNuevaSuscripcion = fechaNuevoInicio;
-            doctor.costoNuevaSuscripcion = doctor.costoSuscripcion
+            doctor.costoNuevaSuscripcion = doctor.costoSuscripcion;
+            doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
         }
       }
       await doctor.save();
@@ -69,8 +73,6 @@ const registrarDoctor = async (req, res) => {
         where:{correoElectronico:correoElectronico}
     })
 
-    
-
     if(!doctor){
         const error = new Error('El usuario no existe');
         return res.status(400).json({msg: error.message});
@@ -92,8 +94,6 @@ const registrarDoctor = async (req, res) => {
         return res.status(400).json({msg: error.message});
     }
 
-    //verificar
-    
     //Comprobar si el usuario esta confirmado
     
     if(!doctor.confirmado){
@@ -309,11 +309,11 @@ const registrarDoctor = async (req, res) => {
         }else if(!req.body.renovacionAutomatica){
             doctor.renovacionAutomatica=doctor.renovacionAutomatica
         }
-        /*
-        doctor.renovacionAutomatica = 
-                req.body.renovacionAutomatica
-                || doctor.renovacionAutomatica;
-        */
+    
+        doctor.tipoNuevaSuscripcion = 
+            req.body.tipoNuevaSuscripcion
+                || doctor.tipoNuevaSuscripcion;
+
         doctor.fechaInicioNuevaSuscripcion = 
                 req.body.fechaInicioNuevaSuscripcion
                 || doctor.fechaInicioNuevaSuscripcion;
@@ -389,14 +389,6 @@ const registrarDoctor = async (req, res) => {
                         msg:error.message
                 })
         }
-/*
-        if(doctor.idDoctor!==req.doctor.idDoctor){
-                const error= new Error('No puedes modificar los datos de otro medico')
-                return res.status(404).json({
-                        msg:error.message
-                })
-        }
-        */
 
         try {
             await doctor.destroy({
@@ -411,28 +403,67 @@ const registrarDoctor = async (req, res) => {
     }
 
     const comprobarSuscripciones = async (req,res) =>{
+        const doctores = await Doctor.findAll();
         try {
-            const doctores = await Doctor.findAll();
-        
+            
             // Itera sobre cada doctor
             for (let doctor of doctores) {
-              // Revisa si el doctor tiene habilitada la renovación automática o tiene una nueva suscripción programada
-              if (doctor.RenovacionAutomatica || doctor.FechaInicioNuevaSuscripcion) {
+                //Crea un registro en la tabla HistoricoSuscripciones
+                let historico = {
+                    idDoctor: doctor.idDoctor,
+                    fechaInicioSuscripcion: doctor.fechaInicioSuscripcion,
+                    fechaFinSuscripcion: doctor.fechaFinSuscripcion,
+                    costoSuscripcion: doctor.costoSuscripcion
+                  };
+                const historicoSuscripcion = new HistoricoSuscripcion(historico);
+                try {
+                    await historicoSuscripcion.save()
+                } catch (error) {
+                    console.log(error)
+                }
+              // Revisa si el doctor tiene habilitada la renovación automática o tiene una nueva suscripción programada 
+              if (doctor.fechaInicioNuevaSuscripcion) {
                 // Obtiene la fecha actual
                 const fechaActual = moment().format('YYYY-MM-DD');
-        
+                console.log(fechaActual)
                 // Revisa si la fecha actual es igual o menor a un día previo a la fecha de finalización de la suscripción actual
-                if (moment(doctor.FechaFinSuscripcion).subtract(1, 'day').isSameOrBefore(fechaActual)) {
+                if (moment(doctor.fechaFinSuscripcion).subtract(1, 'day').isSameOrBefore(fechaActual)) {
                   // Actualiza los valores de la suscripción actual con los de la nueva suscripción
                   doctor.fechaInicioSuscripcion = doctor.fechaInicioNuevaSuscripcion;
                   doctor.fechaFinSuscripcion = doctor.fechaFinNuevaSuscripcion;
                   doctor.costoSuscripcion = doctor.costoNuevaSuscripcion;
         
-                  // Reinicia los valores de la nueva suscripción a nulos o cero
-                  doctor.fechaInicioNuevaSuscripcion = null;
-                  doctor.fechaFinNuevaSuscripcion = null;
-                  doctor.costoNuevaSuscripcion = 0;
-        
+                  if(doctor.renovacionAutomatica===true){
+                    if(doctor.tipoNuevaSuscripcion===1){
+                        doctor.fechaInicioNuevaSuscripcion = doctor.fechaFinSuscripcion;
+                        let fechaNuevoInicio = new Date(doctor.fechaInicioNuevaSuscripcion);
+                        fechaNuevoInicio.setDate(fechaNuevoInicio.getDate()+30)
+                        doctor.fechaFinNuevaSuscripcion = fechaNuevoInicio;
+                        doctor.costoNuevaSuscripcion = doctor.costoSuscripcion;
+                        doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
+                    }else if(doctor.tipoNuevaSuscripcion===2){
+                        doctor.fechaInicioNuevaSuscripcion = doctor.fechaFinSuscripcion;
+                        let fechaNuevoInicio = new Date(doctor.fechaInicioNuevaSuscripcion);
+                        fechaNuevoInicio.setDate(fechaNuevoInicio.getDate()+90)
+                        doctor.fechaFinNuevaSuscripcion = fechaNuevoInicio;
+                        doctor.costoNuevaSuscripcion = doctor.costoSuscripcion;
+                        doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
+                    }else{
+                        doctor.fechaInicioNuevaSuscripcion = doctor.fechaFinSuscripcion;
+                        let fechaNuevoInicio = new Date(doctor.fechaInicioNuevaSuscripcion);
+                        fechaNuevoInicio.setDate(fechaNuevoInicio.getDate()+365)
+                        doctor.fechaFinNuevaSuscripcion = fechaNuevoInicio;
+                        doctor.costoNuevaSuscripcion = doctor.costoSuscripcion;
+                        doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
+                    }
+                  }else{
+                    // Reinicia los valores de la nueva suscripción a nulos o cero
+                    doctor.fechaInicioNuevaSuscripcion = null;
+                    doctor.fechaFinNuevaSuscripcion = null;
+                    doctor.costoNuevaSuscripcion = 0;
+                    doctor.tipoNuevaSuscripcion = null;
+                  }
+
                   // Guarda los cambios en la base de datos
                   await doctor.save();
                 }
@@ -441,6 +472,7 @@ const registrarDoctor = async (req, res) => {
         
             // Devuelve una respuesta exitosa al cliente
             res.status(200).json({ mensaje: 'Suscripciones actualizadas correctamente.' });
+            
           } catch (error) {
             // Devuelve una respuesta de error al cliente
             res.status(500).json({ mensaje: 'Ocurrió un error al actualizar las suscripciones.' });
@@ -453,7 +485,7 @@ const registrarDoctor = async (req, res) => {
         const doctor = await Doctor.findByPk(idDoctor)
 
         if(!doctor){
-                const error= new Error('Doctor No encontrado')
+                const error= new Error('Doctor No Encontrado')
                 return res.status(404).json({
                         msg:error.message
                 })
@@ -467,8 +499,9 @@ const registrarDoctor = async (req, res) => {
         }
 
         try {
+            doctor.tipoNuevaSuscripcion = null;
             doctor.renovacionAutomatica = 0;
-            doctor.FechaInicioNuevaSuscripcion = null;
+            doctor.fechaInicioNuevaSuscripcion = null;
             doctor.fechaFinNuevaSuscripcion = null;
             doctor.costoNuevaSuscripcion = null;
 
@@ -478,6 +511,25 @@ const registrarDoctor = async (req, res) => {
             console.log(error)
         }
     }
+
+    const obtenerHistorico = async (req, res) =>{
+        const historico = await HistoricoSuscripcion.findAll({
+            include:{model:Doctor}
+        })
+
+        if(!historico){
+                const error= new Error('Error de consulta a BD')
+                return res.status(404).json({
+                        msg:error.message
+                })
+        }
+
+
+        res.json(historico)
+
+    }
+
+    
 
 
   export {registrarDoctor, 
@@ -493,6 +545,7 @@ const registrarDoctor = async (req, res) => {
           obtenerDoctores,
           eliminarDoctor,
           comprobarSuscripciones,
-          cancelarSuscripcion
+          cancelarSuscripcion,
+          obtenerHistorico
           };
 

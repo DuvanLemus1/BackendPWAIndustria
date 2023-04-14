@@ -66,6 +66,9 @@ const Doctor = sequelize.define('doctores', {
     type: DataTypes.DECIMAL(10,2),
     allowNull: false
   },
+  tipoNuevaSuscripcion:{
+    type:DataTypes.INTEGER,
+  },
   fechaInicioNuevaSuscripcion: {
     type: DataTypes.DATEONLY,
     allowNull: true
