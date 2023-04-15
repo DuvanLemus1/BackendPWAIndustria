@@ -12,6 +12,7 @@ const Cita = sequelize.define('citas', {
     },
     precio: {
       type: DataTypes.DECIMAL(10,2),
+      trim: true,
       allowNull: false
     },
     fechaCita: {

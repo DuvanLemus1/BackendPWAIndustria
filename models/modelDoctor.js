@@ -12,16 +12,20 @@ const Doctor = sequelize.define('doctores', {
   nombreDoctor: {
     type: DataTypes.STRING(200),
     allowNull: false,
+    trim: true
   },
   segundoNombreDoctor: {
-    type: DataTypes.STRING(200)
+    type: DataTypes.STRING(200),
+    trim: true
   },
   apellidoDoctor: {
     type: DataTypes.STRING(200),
+    trim: true,
     allowNull: false,
   },
   segundoApellidoDoctor: {
-    type: DataTypes.STRING(200)
+    type: DataTypes.STRING(200),
+    trim: true
   },
   rol: {
     type: DataTypes.STRING(200),
@@ -30,14 +34,17 @@ const Doctor = sequelize.define('doctores', {
   correoElectronico: {
     type: DataTypes.STRING(200),
     allowNull: false,
+    trim: true,
     unique:true
   },
   contrasena: {
     type: DataTypes.STRING(200),
+    trim: true,
     allowNull: false,
   },
   telefono: {
     type: DataTypes.STRING(20),
+    trim: true,
     allowNull: false,
   },
   token: {
