@@ -3,7 +3,7 @@ import { DataTypes, Sequelize } from 'sequelize';
 
 import Doctor from './modelDoctor.js'; 
 
-const HistoricoSuscripcion = sequelize.define('historicosuscripciones', {
+const HistoricoSuscripcion = sequelize.define('historicoSuscripciones', {
     idSuscripcion: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -32,7 +32,7 @@ const HistoricoSuscripcion = sequelize.define('historicosuscripciones', {
         }
     }
     },{
-      tablename:'historicosuscripciones'
+      tablename:'historicoSuscripciones'
     },
     {
       timestamps: false,

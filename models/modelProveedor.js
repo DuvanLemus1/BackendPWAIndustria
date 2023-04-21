@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize';
 
 import Doctor from './modelDoctor.js'
 
-const ProveedorMedicamento = sequelize.define('proveedoresmedicamentos', {
+const ProveedorMedicamento = sequelize.define('ProveedoresMedicamentos', {
     idProveedor: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -35,7 +35,7 @@ const ProveedorMedicamento = sequelize.define('proveedoresmedicamentos', {
         }
     }
     },{
-      tablename:'proveedoresmedicamentos'
+      tablename:'ProveedoresMedicamentos'
     },
     {
       timestamps: false,

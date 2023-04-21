@@ -4,7 +4,7 @@ import { DataTypes, Sequelize } from 'sequelize';
 
 import Paciente from './modelPaciente.js'; 
 
-const Cita = sequelize.define('citas', {
+const Cita = sequelize.define('Citas', {
     idCita: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -42,7 +42,7 @@ const Cita = sequelize.define('citas', {
         }
     }
     },{
-      tablename:'citas'
+      tablename:'Citas'
     },
     {
       timestamps: false,

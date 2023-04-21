@@ -2,7 +2,7 @@ import sequelize from '../config/db.js';
 import { DataTypes, Sequelize } from 'sequelize';
 import bcrypt from 'bcrypt';
 
-const Doctor = sequelize.define('doctores', {
+const Doctor = sequelize.define('Doctores', {
   idDoctor: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -94,7 +94,7 @@ const Doctor = sequelize.define('doctores', {
   },
 
   },{
-    tablename:'doctores'
+    tablename:'Doctores'
   },
   {
     timestamps: false,
