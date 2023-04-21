@@ -1,7 +1,6 @@
 import sequelize from '../config/db.js';
 import { DataTypes, Sequelize } from 'sequelize';
 import bcrypt from 'bcrypt';
-//import Paciente from './modelPaciente.js';
 
 const Doctor = sequelize.define('doctores', {
   idDoctor: {
@@ -125,8 +124,5 @@ const Doctor = sequelize.define('doctores', {
 
   Doctor.prototype.comprobarContrasena = async function(contrasenaFormulario) {
   return await bcrypt.compare(contrasenaFormulario, this.contrasena);}
-
-  //Paciente.belongsTo(Doctor ,{foreignKey: 'idDoctor'});
-  //Doctor.hasMany(Paciente, { foreignKey: 'idDoctor' });
 
 export default Doctor;
