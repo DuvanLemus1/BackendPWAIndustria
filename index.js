@@ -30,8 +30,8 @@ sequelize
 
 //Configurar CORS
 
-const whitelist=["http://23.23.69.216"];
-const whitelist2=["http://ec2-23-23-69-216.compute-1.amazonaws.com/"]
+const whitelist=["http://18.205.245.244/"];
+const whitelist2=["ec2-18-205-245-244.compute-1.amazonaws.com/"]
 
 const corsOptions={
   origin: function(origin, callback){
