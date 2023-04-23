@@ -30,11 +30,12 @@ sequelize
 
 //Configurar CORS
 
-const whitelist=["http://127.0.0.1:5173"];
+const whitelist=["http://23.23.69.216"];
+const whitelist2=["http://ec2-23-23-69-216.compute-1.amazonaws.com/"]
 
 const corsOptions={
   origin: function(origin, callback){
-    if(whitelist.includes(origin)){
+    if(whitelist.includes(origin) || whitelist2.includes(origin)){
       //Consulta la API
       callback(null,true);
   }else{
@@ -54,7 +55,7 @@ app.use("/api/citas", routerCitas);
 app.use("/api/medicamentos", routerMedicamentos)
 
 
-const PORT= 8080;
+const PORT= process.env.PORT;
 app.listen(PORT,()=>{
     console.log(`Corriendo en el puerto ${PORT}`);
 });
