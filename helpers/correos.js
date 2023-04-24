@@ -14,7 +14,7 @@ export const correoRegistro = async (datos)=>{
 
         //Informacion del correo
         const info = await transport.sendMail({
-            from: "'Sistema Medico' <cuentas@uptask.com>",
+            from: "'Sistema Médico' <cuentas@KJDhealth.com>",
             to: correoElectronico,
             subject:"Autentificacion de Cuenta",
             text: "Comprueba tu cuenta en nuestro sistema",
@@ -42,14 +42,14 @@ export const correoRecuperacion = async (datos)=>{
 
         //Informacion del correo
         const info = await transport.sendMail({
-            from: "'Reestablece tu contraseña' <cuentas@uptask.com>",
+            from: "'Reestablece tu contraseña' <cuentas@KJD.com>",
             to: correoElectronico,
             subject:"Recuperación de contraseña",
             text: "Has solicitado una recuperación de contreseña",
             html:`
                 <p> Hola, ${nombreDoctor}. Establece una nueva contraseña. </p>
                 <p> Sigue el siguiente enlace para establecer una nueva contraseña:</p>
-                <p> <a href="http://127.0.0.1:5173/olvideContrasena/${token}"> Reestablecer contrasena</a></p>
+                <p> <a href="http://127.0.0.1:5173/olvideContrasena/${token}"> Reestablecer contraseña</a></p>
                 `
 
         })

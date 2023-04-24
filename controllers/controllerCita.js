@@ -18,7 +18,7 @@ const crearCita = async (req, res)=>{
     }
 
     if(existePaciente.idDoctor !== req.doctor.idDoctor){
-        const error= new Error('Este paciente no es asociado al doctor logueado')
+        const error= new Error('Este paciente no está asociado al doctor logueado')
         return res.status(403).json({msg:error.message})
     }
     console.log(existePaciente);
@@ -41,7 +41,7 @@ const obtenerCita = async (req, res)=>{
     const cita = await Cita.findByPk(idCita)
 
     if(!cita){
-        const error = new Error('Tarea no encontrada');
+        const error = new Error('Cita no encontrada');
         return res.status(404).json({msg:error.message})
     }
     
@@ -53,7 +53,7 @@ const obtenerCita = async (req, res)=>{
     })
     
     if(cita.idPaciente!==paciente.idPaciente){
-        const error = new Error('Accion no valida, error de vinculacion entre cita y paciente');
+        const error = new Error('Acción no valida, error de vinculación entre cita y paciente');
         return res.status(403).json({msg:error.message})
        }
 
@@ -80,7 +80,7 @@ const actualizarCita = async (req, res)=>{
     })
     
     if(cita.idPaciente!==paciente.idPaciente){
-        const error = new Error('Accion no valida');
+        const error = new Error('Acción no válida');
         return res.status(403).json({msg:error.message})
        }
     
@@ -117,7 +117,7 @@ const eliminarCita = async (req, res)=>{
     })
     
     if(cita.idPaciente!==paciente.idPaciente){
-        const error = new Error('Accion no valida');
+        const error = new Error('Acción no valida');
         return res.status(403).json({msg:error.message})
        }
     

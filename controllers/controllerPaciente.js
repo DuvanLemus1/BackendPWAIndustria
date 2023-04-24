@@ -42,7 +42,7 @@ const actualizarPaciente = async (req, res) => {
         }
 
         if(paciente.idDoctor!==req.doctor.idDoctor){
-                const error= new Error('Accion no valida')
+                const error= new Error('Acción no válida')
                 return res.status(404).json({
                         msg:error.message
                 })
@@ -91,7 +91,7 @@ const eliminarPaciente = async (req, res) => {
         }
 
         if(paciente.idDoctor!==req.doctor.idDoctor){
-                const error= new Error('Accion no valida')
+                const error= new Error('Acción no válida')
                 return res.status(404).json({
                         msg:error.message
                 })
@@ -122,7 +122,7 @@ const obtenerDetallePaciente = async (req, res) => {
         }
 
         if(paciente.idDoctor!==req.doctor.idDoctor){
-                const error= new Error('Accion no valida')
+                const error= new Error('Acción no válida')
                 return res.status(404).json({
                         msg:error.message
                 })

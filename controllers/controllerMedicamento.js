@@ -18,7 +18,7 @@ const crearMedicamento = async (req, res)=>{
     }
 
     if(existeProveedor.idDoctor !== req.doctor.idDoctor){
-        const error= new Error('Este proveedor no esta asociado al doctor logueado')
+        const error= new Error('Este proveedor no está asociado al doctor logueado')
         return res.status(403).json({msg:error.message})
     }
     console.log(existeProveedor);
@@ -53,7 +53,7 @@ const obtenerMedicamento = async (req, res)=>{
     })
     
     if(medicamento.idProveedor!==proveedor.idProveedor){
-        const error = new Error('Accion no valida, error de vinculacion entre medicamento y proveedor');
+        const error = new Error('Acción no valida, error de vinculación entre medicamento y proveedor');
         return res.status(403).json({msg:error.message})
        }
 
@@ -80,7 +80,7 @@ const actualizarMedicamento = async (req, res)=>{
     })
     
     if(medicamento.idProveedor!==proveedor.idProveedor){
-        const error = new Error('Accion no valida');
+        const error = new Error('Acción no valida');
         return res.status(403).json({msg:error.message})
        }
     
@@ -118,7 +118,7 @@ const eliminarMedicamento = async (req, res)=>{
     })
     
     if(medicamento.idProveedor!==proveedor.idProveedor){
-        const error = new Error('Accion no valida');
+        const error = new Error('Acción no valida');
         return res.status(403).json({msg:error.message})
        }
     

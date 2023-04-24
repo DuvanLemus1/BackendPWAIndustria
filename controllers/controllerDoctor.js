@@ -47,9 +47,11 @@ const registrarDoctor = async (req, res) => {
             doctor.tipoNuevaSuscripcion = doctor.tipoSuscripcion;
         }
       }
+      doctor.token=null;
+      doctor.confirmado=1;
       await doctor.save();
       res.json({
-        msg:"Usuario creado, revisa email"
+        msg:"Usuario creado, ya puedes iniciar sesión"
       })
 
       //Enviar Correo
@@ -90,7 +92,7 @@ const registrarDoctor = async (req, res) => {
         console.log(doctor.fechaFinSuscripcion,' es mayor que ',fechaActualFormateada, ', se permite el aceeso')
         
     }else{
-        const error = new Error('Tu suscripcion ha caducado, renovar para acceder');
+        const error = new Error('Tu suscripción ha caducado, renovar para acceder');
         return res.status(400).json({msg: error.message});
     }
 
@@ -114,7 +116,7 @@ const registrarDoctor = async (req, res) => {
         })
         console.log('Es correcto')
         }else{
-            const error = new Error('La contrasena no es correcta');
+            const error = new Error('La contraseña no es correcta');
             return res.status(403).json({msg: error.message});
         }
     
@@ -170,7 +172,7 @@ const registrarDoctor = async (req, res) => {
                 token: doctor.token
               });
 
-            res.json({msg:'Hemos un enviado un correo para el reestablecimiento de tu contrasena'});
+            res.json({msg:'Hemos un enviado un correo para el reestablecimiento de tu contraseña'});
         } catch (error) {
             console.log(error)
         }
@@ -184,10 +186,10 @@ const registrarDoctor = async (req, res) => {
         })
 
         if(tokenValido){
-            res.json({msg:'Token valido y el usuario existe'});
+            res.json({msg:'Token válido y el usuario existe'});
         
         }else{
-            const error = new Error('Token no Valido');
+            const error = new Error('Token no Válido');
             return res.status(400).json({msg: error.message});
         }
 
@@ -207,14 +209,14 @@ const registrarDoctor = async (req, res) => {
 
             try {
                 await doctor.save();
-                res.json({msg:'Contrasena actualizada correctamente'});
+                res.json({msg:'Contraseña actualizada correctamente'});
             } catch (error) {
                 console.log(error);
             }
             
             
         }else{
-            const error = new Error('Token no Valido');
+            const error = new Error('Token no Válido');
             return res.status(400).json({msg: error.message});
         }
 
@@ -241,7 +243,7 @@ const registrarDoctor = async (req, res) => {
             }
     
             if(doctor.idDoctor!==req.doctor.idDoctor){
-                    const error= new Error('No puedes modificar los datos de otro medico')
+                    const error= new Error('No puedes modificar los datos de otro médico')
                     return res.status(404).json({
                             msg:error.message
                     })
@@ -296,7 +298,7 @@ const registrarDoctor = async (req, res) => {
         }
 
         if(doctor.idDoctor!==req.doctor.idDoctor){
-                const error= new Error('No puedes modificar los datos de otro medico')
+                const error= new Error('No puedes modificar los datos de otro médico')
                 return res.status(404).json({
                         msg:error.message
                 })
@@ -471,7 +473,7 @@ const registrarDoctor = async (req, res) => {
             }
         
             // Devuelve una respuesta exitosa al cliente
-            res.status(200).json({ mensaje: 'Suscripciones actualizadas correctamente.' });
+            res.status(200).json({ mensaje: 'Suscripciones actualizadas correctamente' });
             
           } catch (error) {
             // Devuelve una respuesta de error al cliente
@@ -492,7 +494,7 @@ const registrarDoctor = async (req, res) => {
         }
 
         if(doctor.idDoctor!==req.doctor.idDoctor){
-                const error= new Error('No puedes modificar los datos de otro medico')
+                const error= new Error('No puedes modificar los datos de otro médico')
                 return res.status(404).json({
                         msg:error.message
                 })
@@ -506,7 +508,7 @@ const registrarDoctor = async (req, res) => {
             doctor.costoNuevaSuscripcion = null;
 
             await doctor.save();
-            res.json('Suscripcion cancelada exitosamente')
+            res.json('Suscripción cancelada exitosamente')
         } catch (error) {
             console.log(error)
         }
